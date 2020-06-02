@@ -1,0 +1,229 @@
+<% layout('layout') -%>
+
+<!-- Main content -->
+<div class="main-content" id="panel">
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <h6 class="h1 text-white d-inline-block mb-0" style="padding-top: 3rem;">User Management</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <!-- Card header -->
+            <div class="card-header border-0">
+              <h2 class="mb-0">User table</h3>
+            </div>
+            <!-- Light table -->
+            <div class="table-responsive">
+              <table class="table align-items-center table-flush" style="text-align: center;">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col" class="sort">ID</th>
+                    <th scope="col" class="sort">Name</th>
+                    <th scope="col" class="sort" >Email</th>
+                    <th scope="col" class="sort">Role</th>
+                    <th scope="col" class="sort">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="list">
+                  <% for(var i=0; i < userdata.length; i++) { %>
+                    <tr>
+                      <td>
+                        <%= i + 1 %>
+                      </td>
+                      <td>
+                        <%= userdata[i].name %>
+                      </td>
+                      <td>
+                        <%= userdata[i].email %>
+                      </td>
+                      <td>
+                        <% if (userdata[i].role == 1) { %>
+                          User
+                        <%} else if (userdata[i].role == 2) { %>
+                          Manager
+                        <%} else { %>
+                          Admin
+                        <% } %>
+                        <!-- <%= userdata[i].role %> -->
+                      </td>
+                      <td>
+                        <div class="dropdown">
+                          <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                            <a class="dropdown-item" onclick="editUser('<%= JSON.stringify(userdata[i]) %>');" >Edit</a>
+                            <a class="dropdown-item" onclick="deleteUser('<%=userdata[i]._id%>');">Remove</a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  <% } %>
+                  
+                </tbody>
+              </table>
+            </div>
+            <!-- Card footer -->
+            <!-- <div class="card-footer py-4">
+              <nav aria-label="...">
+                <ul class="pagination justify-content-end mb-0">
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">
+                      <i class="fas fa-angle-left"></i>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                  </li>
+                  <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">
+                      <i class="fas fa-angle-right"></i>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-new" id = "editUser" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog"> 
+    <!-- Modal Content: begins -->
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="gridSystemModalLabel">Edit User</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <!-- Modal Body -->  
+      <div class="modal-body">
+        <div class="body-message">
+          <div class="form-group">
+            <label for="exampleInputEmail">Name</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Name" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail">Email address</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail">Role</label>
+            <!-- <input type="number" min="1" max="3" class="form-control" name="role" id="role" placeholder="Role" required> -->
+            <select class="form-control input-lg" id="role" name="role">
+              <option value=1>User</option>
+              <option value=2>Manager</option>
+              <option value=3>Admin</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <input type="hidden" id="userid">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" id="csrf">
+        <button type="button" class="btn btn-success" onclick="saveUser();" >Save</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <!-- Modal Content: ends -->
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-new" id = "removeUser" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog"> 
+    <!-- Modal Content: begins -->
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="gridSystemModalLabel">Management</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <!-- Modal Body -->  
+      <div class="modal-body">
+        <div class="body-message">
+          <p>Are you sure to remove this user?</p>
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <input type="hidden" id="removeUserid">
+        <button type="button" class="btn btn-success" onclick="remove();" >OK</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+    <!-- Modal Content: ends -->
+  </div>
+</div>
+
+  <script>
+    function editUser(data){     
+      var userData = JSON.parse(data)
+      console.log(userData._id);
+
+      $('#name').val(userData.name);
+      $('#email').val(userData.email);
+      $('#role').val(userData.role);
+      $('#userid').val(userData._id);
+      $('#editUser').modal();
+    };
+
+    function saveUser(){
+      var userId = $('#userid').val()
+      var name = $('#name').val();
+      var email = $('#email').val();
+      var role = $('#role').val();
+      console.log(userId, name, email, role)
+      $.ajax({
+        url: '/userUpdate',
+        method: 'POST',
+        data: {
+          _csrf: $('#csrf').val(),
+          userId: $('#userid').val(),
+          name: $('#name').val(),
+          email: $('#email').val(),
+          role: $('#role').val()
+        },
+        success: function (res) {
+          $('#editUser').modal('hide');
+          location.reload();
+        }
+      })
+    }
+
+    function deleteUser(data){
+      $('#removeUserid').val(data)
+      $('#removeUser').modal();
+    }
+
+    function remove(){
+      $.ajax({
+        url: '/userDelete/' + $('#removeUserid').val(),
+        method: 'GET',
+        success: function (res) {
+          console.log("------delete success---------")
+          location.reload();
+        }
+      })
+    }
+  </script>

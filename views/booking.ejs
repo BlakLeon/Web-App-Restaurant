@@ -1,0 +1,63 @@
+<% layout('layout') -%>
+
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('./assets/img/cousine.jpg')">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 ml-auto mr-auto">
+          <div class="brand text-center">
+            <img src="./Assets/logo/logo_transparent.png" width="250px" height="250px">
+            <h3 class="title text-center">The view on Eat</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main main-raised">
+    <div class="container">
+      <div class="section text-center">
+        <form action="/booking" method="POST">
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <input type="email" name="email" class="form-control"  placeholder="Email">
+            </div>
+            <div class="form-group col-md-6">
+              <input type="text" name="name" class="form-control" placeholder="Last Name">
+            </div>
+          </div>
+          <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="text" name="phone" class="form-control"  placeholder="Phone Number">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="number" name="persons" class="form-control" placeholder="Persons">
+          </div>
+        </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Date</label>
+              <input type="date" name="date" class="form-control">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Time Zone</label>
+              <select id="inputState" name="timezone" class="form-control">
+                <option value="17:00-18:00">17:00-18:00</option>
+                <option value="18:00-19:00">18:00-19:00</option>
+                <option value="19:00-20:00">19:00-20:00</option>
+                <option value="20:00-21:00">20:00-21:00</option>
+                <option value="21:00-22:00">21:00-22:00</option>
+                <option value="22:00-23:00">22:00-23:00</option>
+                <option value="23:00-Close">23:00-Close</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label>Do you have a car?</label>
+              <input type="checkbox" name="car" class="form-control" >
+            </div>
+          </div>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button type="submit" class="btn btn-primary" style="background-color: #bd3246; color:#fdc8aa;">Reservation</button>
+        </form>
+      </div>
+    </div>
+  </div>
